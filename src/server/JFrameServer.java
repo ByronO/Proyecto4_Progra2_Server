@@ -1,4 +1,4 @@
-package chat_server;
+package server;
 
 import java.awt.Button;
 import java.io.*;
