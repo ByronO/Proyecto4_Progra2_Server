@@ -36,7 +36,7 @@ public class JFrameServer extends javax.swing.JFrame {
 
         @Override
         public void run() {
-            String message, connect = "Connect", disconnect = "Disconnect", chat = "Chat", attack = "Attack", end = "END";
+            String message, connect = "Connect", disconnect = "Disconnect", chat = "Chat", attack = "Attack", end = "END", turn = "fin";
             String[] data;
 
             try {
@@ -53,9 +53,11 @@ public class JFrameServer extends javax.swing.JFrame {
                     } else if (data[2].equals(chat)) {
                         tellEveryone(message);
                     } else if (data[2].equals(attack)) {
-                        tellEveryoneAttack(message);
+                        tellEveryone2(message);
+                    } else if (data[2].equals(turn)) {
+                        tellEveryone2(message);
                     } else if (data[2].equals(end)) {
-                        tellEveryoneAttack(message);
+                        tellEveryone2(message);
                     }else {
                         ta_chat.append("No Conditions were met. \n");
                     }
@@ -268,7 +270,7 @@ public class JFrameServer extends javax.swing.JFrame {
         }
     }
     
-    public void tellEveryoneAttack(String message) {
+    public void tellEveryone2(String message) {
         Iterator it = clientOutputStreams.iterator();
 
         while (it.hasNext()) {
