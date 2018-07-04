@@ -36,17 +36,13 @@ public class JFrameServer extends javax.swing.JFrame {
 
         @Override
         public void run() {
-            String message, connect = "Connect", disconnect = "Disconnect", chat = "Chat";
+            String message, connect = "Connect", disconnect = "Disconnect", chat = "Chat", attack = "Attack", end = "END";
             String[] data;
 
             try {
                 while ((message = reader.readLine()) != null) {
-//                    ta_chat.append("Received: " + message + "\n");
                     data = message.split(":");
-
-//                    for (String token : data) {
-//                        ta_chat.append(token + "\n");
-//                    }
+                    System.out.println(data[2]);
 
                     if (data[2].equals(connect)) {
                         tellEveryone((data[0] + ":" + data[1] + ":" + chat));
@@ -56,7 +52,11 @@ public class JFrameServer extends javax.swing.JFrame {
                         userRemove(data[0]);
                     } else if (data[2].equals(chat)) {
                         tellEveryone(message);
-                    } else {
+                    } else if (data[2].equals(attack)) {
+                        tellEveryoneAttack(message);
+                    } else if (data[2].equals(end)) {
+                        tellEveryoneAttack(message);
+                    }else {
                         ta_chat.append("No Conditions were met. \n");
                     }
                 }
@@ -208,7 +208,7 @@ public class JFrameServer extends javax.swing.JFrame {
             users = new ArrayList();
 
             try {
-                ServerSocket serverSock = new ServerSocket(2222);
+                ServerSocket serverSock = new ServerSocket(5000);
 
                 while (true) {
                     Socket clientSock = serverSock.accept();
@@ -227,9 +227,7 @@ public class JFrameServer extends javax.swing.JFrame {
 
     public void userAdd(String data) {
         String message, add = ": :Connect", done = "Server: :Done", name = data;
-//        ta_chat.append("Before " + name + " added. \n");
         users.add(name);
-//        ta_chat.append("After " + name + " added. \n");
         String[] tempList = new String[(users.size())];
         users.toArray(tempList);
 
@@ -261,6 +259,23 @@ public class JFrameServer extends javax.swing.JFrame {
                 PrintWriter writer = (PrintWriter) it.next();
                 writer.println(message);
 //                ta_chat.append("Sending: " + message + "\n");
+                writer.flush();
+                ta_chat.setCaretPosition(ta_chat.getDocument().getLength());
+
+            } catch (Exception ex) {
+                ta_chat.append("Error telling everyone. \n");
+            }
+        }
+    }
+    
+    public void tellEveryoneAttack(String message) {
+        Iterator it = clientOutputStreams.iterator();
+
+        while (it.hasNext()) {
+            try {
+                PrintWriter writer = (PrintWriter) it.next();
+                writer.println(message);
+                ta_chat.append("Sending: " + message + "\n");
                 writer.flush();
                 ta_chat.setCaretPosition(ta_chat.getDocument().getLength());
 
