@@ -36,7 +36,7 @@ public class JFrameServer extends javax.swing.JFrame {
 
         @Override
         public void run() {
-            String message, connect = "Connect", disconnect = "Disconnect", chat = "Chat", attack = "Attack", end = "END", turn = "fin";
+            String message, connect = "Connect", disconnect = "Disconnect", chat = "Chat", attack = "Attack", end = "END", turn = "fin", info = "right";
             String[] data;
 
             try {
@@ -56,10 +56,10 @@ public class JFrameServer extends javax.swing.JFrame {
                         tellEveryone2(message);
                     } else if (data[2].equals(turn)) {
                         tellEveryone2(message);
+                    } else if (data[2].equals(info)) {
+                        tellEveryone2(message);
                     } else if (data[2].equals(end)) {
                         tellEveryone2(message);
-                    }else {
-                        ta_chat.append("No Conditions were met. \n");
                     }
                 }
             } catch (Exception ex) {
